@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Sell Order 2.0 - Melonn</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .header h1 {
+            color: #1a1a2e;
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .motivation-banner {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 15px;
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
+        }
+        
+        .global-field {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .global-field label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        
+        .global-field input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .global-field input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .required {
+            color: #e74c3c;
+        }
+        
+        .tabs-container {
+            margin-bottom: 25px;
+        }
+        
+        .tabs-header {
+            display: flex;
+            background: #f1f3f4;
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: #666;
+            border-radius: 8px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .tab-button:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .tab-button.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-description {
+            background: #e8f4f8;
+            border-left: 4px solid #667eea;
+            padding: 12px 15px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+            font-size: 14px;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tab-description .icon {
+            font-size: 20px;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section:last-of-type {
+            margin-bottom: 0;
+        }
+        
+        .question {
+            margin-bottom: 20px;
+        }
+        
+        .question-label {
+            display: block;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+        
+        input[type="text"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        select {
+            cursor: pointer;
+            background: white;
+        }
+        
+        .file-upload-container {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+        
+        .file-upload-container:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .file-upload-container.has-file {
+            border-color: #27ae60;
+            background: #f0fff4;
+        }
+        
+        .file-upload-container input[type="file"] {
+            display: none;
+        }
+        
+        .file-upload-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .file-upload-text {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .file-upload-hint {
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .file-preview {
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .file-preview.active {
+            display: block;
+        }
+        
+        .file-preview img {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .file-name {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border: 2px solid transparent;
+        }
+        
+        .radio-option:hover {
+            background: #e9ecef;
+        }
+        
+        .radio-option input[type="radio"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            accent-color: #667eea;
+        }
+        
+        .star-rating {
+            display: flex;
+            gap: 5px;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+        
+        .star-rating input {
+            display: none;
+        }
+        
+        .star-rating label {
+            font-size: 28px;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #ffc107;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .submit-btn.loading {
+            color: transparent;
+            position: relative;
+        }
+        
+        .submit-btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spinner 0.8s linear infinite;
+        }
+        
+        @keyframes spinner {
+            to { transform: rotate(360deg); }
+        }
+        
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #667eea;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            margin-top: 25px;
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .success-message h2 {
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+        
+        .success-message p {
+            color: #666;
+        }
+        
+        .emoji {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            border-left: 4px solid #c33;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .tabs-header {
+                flex-direction: column;
+            }
+            
+            .tab-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📦 Feedback Sell Order 2.0</h1>
+            <p>Tu opinión nos ayuda a mejorar</p>
+        </div>
+        
+        <div class="motivation-banner">
+            📢 Tu opinión es fundamental. Estamos leyendo cada comentario para construir la mejor experiencia posible para ti.
+        </div>
+        
+        <form id="feedbackForm">
+            <!-- Campo global: Nombre del seller -->
+            <div class="global-field">
+                <label for="seller_name">Nombre del seller <span class="required">*</span></label>
+                <input type="text" id="seller_name" name="seller_name" required placeholder="Ej: Medipiel, Reset, Undergold...">
+            </div>
+            
+            <div class="error-message" id="errorMessage">
+                ❌ Error al enviar. Por favor intenta de nuevo.
+            </div>
+            
+            <!-- Tabs -->
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button type="button" class="tab-button active" data-tab="encuesta">
+                        📋 Encuesta
+                    </button>
+                    <button type="button" class="tab-button" data-tab="observacion">
+                        ⚡ Observación Puntual
+                    </button>
+                </div>
+                
+                <!-- Tab 1: Encuesta -->
+                <div class="tab-content active" id="encuesta-tab">
+                    <div class="tab-description">
+                        <span class="icon">📊</span>
+                        <span>Ayúdanos a hacer una calificación completa de la nueva vista</span>
+                    </div>
+                    
+                    <!-- Sección: Información General -->
+                    <div class="section-title">Información General</div>
+                    
+                    <div class="question">
+                        <label class="question-label">Tu rol <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="role" value="servicio_al_cliente" required>
+                                Servicio al cliente
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="role" value="analista_logistica" required>
+                                Analista/Auxiliar de logística
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="role" value="director_logistica" required>
+                                Director de logística
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="role" value="otro" required>
+                                Otro
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Sección: Evaluación Rápida -->
+                    <div class="section-title">Evaluación Rápida</div>
+                    
+                    <div class="question">
+                        <label class="question-label">¿Qué tan fácil es entender el estado de una orden? <span class="required">*</span></label>
+                        <div class="star-rating">
+                            <input type="radio" id="q1-5" name="claridad_estado" value="5" required>
+                            <label for="q1-5">★</label>
+                            <input type="radio" id="q1-4" name="claridad_estado" value="4" required>
+                            <label for="q1-4">★</label>
+                            <input type="radio" id="q1-3" name="claridad_estado" value="3" required>
+                            <label for="q1-3">★</label>
+                            <input type="radio" id="q1-2" name="claridad_estado" value="2" required>
+                            <label for="q1-2">★</label>
+                            <input type="radio" id="q1-1" name="claridad_estado" value="1" required>
+                            <label for="q1-1">★</label>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <label class="question-label">¿El timeline visual (4 pasos) es más claro que las pestañas? <span class="required">*</span></label>
+                        <div class="star-rating">
+                            <input type="radio" id="q2-5" name="timeline_claridad" value="5" required>
+                            <label for="q2-5">★</label>
+                            <input type="radio" id="q2-4" name="timeline_claridad" value="4" required>
+                            <label for="q2-4">★</label>
+                            <input type="radio" id="q2-3" name="timeline_claridad" value="3" required>
+                            <label for="q2-3">★</label>
+                            <input type="radio" id="q2-2" name="timeline_claridad" value="2" required>
+                            <label for="q2-2">★</label>
+                            <input type="radio" id="q2-1" name="timeline_claridad" value="1" required>
+                            <label for="q2-1">★</label>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <label class="question-label">¿Las promesas de entrega visibles de inmediato son útiles? <span class="required">*</span></label>
+                        <div class="star-rating">
+                            <input type="radio" id="q3-5" name="promesas_utilidad" value="5" required>
+                            <label for="q3-5">★</label>
+                            <input type="radio" id="q3-4" name="promesas_utilidad" value="4" required>
+                            <label for="q3-4">★</label>
+                            <input type="radio" id="q3-3" name="promesas_utilidad" value="3" required>
+                            <label for="q3-3">★</label>
+                            <input type="radio" id="q3-2" name="promesas_utilidad" value="2" required>
+                            <label for="q3-2">★</label>
+                            <input type="radio" id="q3-1" name="promesas_utilidad" value="1" required>
+                            <label for="q3-1">★</label>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <label class="question-label">¿Las incidencias te indican claramente quién gestiona? <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="claridad_incidencias" value="muy_claro" required>
+                                Sí, muy claro
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="claridad_incidencias" value="algo_confuso" required>
+                                Algo confuso
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="claridad_incidencias" value="no_entiendo" required>
+                                No, sigo sin entender
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Sección: Impacto -->
+                    <div class="section-title">Impacto</div>
+                    
+                    <div class="question">
+                        <label class="question-label">¿Cuántas veces has contactado a soporte por dudas sobre órdenes? <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="contacto_soporte" value="nunca" required>
+                                Nunca
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="contacto_soporte" value="1-2" required>
+                                1-2 veces
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="contacto_soporte" value="3-5" required>
+                                3-5 veces
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="contacto_soporte" value="mas-5" required>
+                                Más de 5 veces
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <label class="question-label">¿Qué versión prefieres? <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="version_preferida" value="actual" required>
+                                Versión A (actual con pestañas)
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="version_preferida" value="nueva" required>
+                                Versión B (nueva con timeline)
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Sección: Comentario Final -->
+                    <div class="section-title">Comentario Final</div>
+                    
+                    <div class="question">
+                        <label class="question-label">¿Qué extrañas de la versión anterior o qué mejorarías? <span class="required">*</span></label>
+                        <textarea name="comentarios" required placeholder="Escribe tus comentarios aquí..."></textarea>
+                    </div>
+                    
+                    <button type="button" class="submit-btn" id="submitEncuesta" formnovalidate>Enviar encuesta</button>
+                </div>
+                
+                <!-- Tab 2: Observación Puntual -->
+                <div class="tab-content" id="observacion-tab">
+                    <div class="tab-description">
+                        <span class="icon">💡</span>
+                        <span>Espacio donde puedes contarnos lo que observes sin necesidad de responder preguntas específicas</span>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="question">
+                            <label class="question-label">Tipo de observación <span class="required">*</span></label>
+                            <select name="tipo_observacion" id="tipo_observacion" required>
+                                <option value="">Selecciona una opción...</option>
+                                <option value="error_visual">Error visual</option>
+                                <option value="info_no_clara">La información que hay no es clara</option>
+                                <option value="info_no_suficiente">La información que hay no es suficiente</option>
+                                <option value="no_entiendo">No entiendo lo que me quieren decir</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
+                        
+                        <div class="question">
+                            <label class="question-label">Cuéntanos qué ves o qué te confunde <span class="required">*</span></label>
+                            <textarea name="texto_observacion" id="texto_observacion" required placeholder="Describe lo que observas... Por ejemplo: 'No encuentro el botón de cancelar'"></textarea>
+                        </div>
+                        
+                        <div class="question">
+                            <label class="question-label">Adjuntar captura de pantalla (opcional)</label>
+                            <div class="file-upload-container" id="fileUploadContainer">
+                                <input type="file" name="imagen" id="imagen" accept="image/*">
+                                <div class="file-upload-icon">📎</div>
+                                <div class="file-upload-text">Haz clic para seleccionar una imagen</div>
+                                <div class="file-upload-hint">Formatos: JPG, PNG, GIF</div>
+                            </div>
+                            <div class="file-preview" id="filePreview">
+                                <img id="previewImg" src="" alt="Preview">
+                                <div class="file-name" id="fileName"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="submit-btn" id="submitObservacion" formnovalidate>Enviar observación</button>
+                </div>
+            </div>
+        </form>
+        
+        <div class="success-message" id="successMessage">
+            <div class="emoji">🎉</div>
+            <h2>¡Gracias por tu feedback!</h2>
+            <p>Tus respuestas se han guardado correctamente.</p>
+            <p style="margin-top: 10px; font-size: 13px; color: #999;">Redirigiendo en unos segundos...</p>
+        </div>
+    </div>
+    
+    <script>
+        // Esperar a que el DOM esté completamente cargado
+        document.addEventListener('DOMContentLoaded', function() {
+        
+        // ⚠️ IMPORTANTE: Reemplazar esta URL con la URL de tu Web App de Google Apps Script
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/TU_SCRIPT_ID/exec';
+        
+        // Elementos del DOM
+        const form = document.getElementById('feedbackForm');
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const fileInput = document.getElementById('imagen');
+        const fileUploadContainer = document.getElementById('fileUploadContainer');
+        const filePreview = document.getElementById('filePreview');
+        const previewImg = document.getElementById('previewImg');
+        const fileName = document.getElementById('fileName');
+        
+        console.log('DOM cargado, inicializando formulario...');
+        
+        // Cambiar entre tabs
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // Remover clase active de todos
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Agregar clase active al seleccionado
+                button.classList.add('active');
+                document.getElementById(tabId + '-tab').classList.add('active');
+            });
+        });
+        
+        // Manejar subida de archivo
+        if (fileUploadContainer) {
+            fileUploadContainer.addEventListener('click', () => {
+                fileInput.click();
+            });
+        }
+        
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    // Mostrar preview
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        previewImg.src = e.target.result;
+                        fileName.textContent = file.name;
+                        filePreview.classList.add('active');
+                        fileUploadContainer.classList.add('has-file');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        // Validar campo global
+        function validateSellerName() {
+            const sellerName = document.getElementById('seller_name').value.trim();
+            if (!sellerName) {
+                document.getElementById('seller_name').focus();
+                document.getElementById('seller_name').style.borderColor = '#e74c3c';
+                return false;
+            }
+            document.getElementById('seller_name').style.borderColor = '#e0e0e0';
+            return true;
+        }
+        
+        // Función para validar campos de la pestaña activa
+        function validateActiveTab(tipo) {
+            const activeTab = document.getElementById(tipo + '-tab');
+            let isValid = true;
+            
+            // Validar campos de texto, textarea y select
+            const requiredFields = activeTab.querySelectorAll('input[type="text"][required], textarea[required], select[required]');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = '#e74c3c';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#e0e0e0';
+                }
+            });
+            
+            // Validar radio buttons por grupo
+            const radioGroups = {};
+            activeTab.querySelectorAll('input[type="radio"][required]').forEach(radio => {
+                radioGroups[radio.name] = true;
+            });
+            
+            for (let groupName in radioGroups) {
+                const checked = activeTab.querySelector(`input[name="${groupName}"]:checked`);
+                if (!checked) {
+                    isValid = false;
+                }
+            }
+            
+            return isValid;
+        }
+        
+        // Función para manejar envío
+        async function handleSubmit(tipo) {
+            // Validar nombre del seller
+            if (!validateSellerName()) {
+                alert('Por favor ingresa el nombre del seller');
+                return;
+            }
+            
+            // Validar campos requeridos de la pestaña activa
+            if (!validateActiveTab(tipo)) {
+                alert('Por favor completa todos los campos obligatorios marcados con *');
+                return;
+            }
+            
+            // Obtener botón de submit activo
+            const submitBtn = tipo === 'observacion' ? 
+                document.getElementById('submitObservacion') : 
+                document.getElementById('submitEncuesta');
+            
+            // Deshabilitar botón y mostrar loading
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            submitBtn.textContent = 'Enviando...';
+            errorMessage.style.display = 'none';
+            
+            // Recopilar datos
+            const formData = new FormData(form);
+            const data = {
+                tipo: tipo,
+                seller_name: document.getElementById('seller_name').value.trim()
+            };
+            
+            // Agregar campos según el tipo
+            if (tipo === 'observacion') {
+                const tipoObs = document.getElementById('tipo_observacion');
+                const textoObs = document.getElementById('texto_observacion');
+                
+                if (tipoObs) data.tipo_observacion = tipoObs.value;
+                if (textoObs) data.texto_observacion = textoObs.value;
+                
+                // Si hay imagen, convertir a base64
+                const file = fileInput ? fileInput.files[0] : null;
+                if (file) {
+                    try {
+                        const base64 = await new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => resolve(reader.result);
+                            reader.readAsDataURL(file);
+                        });
+                        data.imagen_base64 = base64;
+                        data.imagen_nombre = `${data.seller_name}_${new Date().toISOString().replace(/[:.]/g, '-')}.${file.name.split('.').pop()}`;
+                    } catch (err) {
+                        console.error('Error al procesar imagen:', err);
+                    }
+                }
+            } else {
+                // Campos de encuesta
+                formData.forEach((value, key) => {
+                    if (key !== 'seller_name' && key !== 'tipo_observacion' && key !== 'texto_observacion' && key !== 'imagen') {
+                        data[key] = value;
+                    }
+                });
+            }
+            
+            try {
+                // Enviar datos a Google Sheets
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                // Mostrar mensaje de éxito
+                form.style.display = 'none';
+                successMessage.style.display = 'block';
+                
+                // Redirigir a la página inicial después de 3 segundos
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                errorMessage.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+                submitBtn.textContent = tipo === 'observacion' ? 'Enviar observación' : 'Enviar encuesta';
+            }
+        }
+        
+        // Agregar event listeners a los botones de submit
+        document.getElementById('submitObservacion').addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Botón Observación clickeado');
+            handleSubmit('observacion');
+        });
+        
+        document.getElementById('submitEncuesta').addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Botón Encuesta clickeado');
+            handleSubmit('encuesta');
+        });
+        
+        console.log('Formulario inicializado correctamente');
+        
+        }); // Cierre del DOMContentLoaded
+    </script>
+</body>
+</html>
